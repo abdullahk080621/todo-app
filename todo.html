@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>My Todo App</title>
+  </head>
+  <body>
+    <div class="header">
+      <button onclick="addTodo()" class="add-todo">Add Todo</button>
+      <input
+        id="todo-title"
+        class="search-bar"
+        type="text"
+        placeholder="Todo..."
+      />
+      <input id="date-picker" class="date-picker" type="date" />
+    </div>
+
+    <div id="todo-list"></div>
+    <style>
+      .add-todo {
+        background-color: white;
+        border-radius: 5px;
+        border: 1px solid black;
+        padding: 4px;
+        margin-right: 5px;
+      }
+      .add-todo:active {
+        background-color: rgb(235, 235, 235);
+      }
+      .add-todo:hover {
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.15);
+      }
+      body {
+        font-family: Roboto, Arial;
+        font-size: 15px;
+        line-height: 20px;
+        padding-top: 40px;
+      }
+      .header {
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: rgb(255, 255, 255);
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(222, 222, 222);
+      }
+      .search-bar {
+        width: 700px;
+        height: 20px;
+        border: 1px solid black;
+        border-radius: 2px;
+      }
+      .search-bar::placeholder {
+        font-size: 14px;
+      }
+      .date-picker {
+        margin-left: 5px;
+        height: 20px;
+        width: 200px;
+        text-align: center;
+        font-size: 15px;
+      }
+    </style>
+
+    <script>
+      // Model
+      let todos = [
+        {
+          title: "Get groceries",
+          dueDate: "2022-10-04",
+          id: "id1",
+        },
+        {
+          title: "Wash car",
+          dueDate: "2022-05-24",
+          id: "id2",
+        },
+        {
+          title: "Make dinner",
+          dueDate: "2022-07-15",
+          id: "id3",
+        },
+      ];
+      // Creates a todo
+      function createTodo(title, dueDate) {
+        const id = "" + new Date().getTime();
+
+        todos.push({
+          title: title,
+          dueDate: dueDate,
+          id: id,
+        });
+      }
+
+      // Deletes a todo
+      function removeTodo(idToDelete) {
+        todos = todos.filter(function (todo) {
+          if (todo.id === idToDelete) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+      }
+
+      render();
+
+      // Controller
+      function addTodo() {
+        const textbox = document.getElementById("todo-title");
+        const title = textbox.value;
+
+        const datePicker = document.getElementById("date-picker");
+        const dueDate = datePicker.value;
+
+        createTodo(title, dueDate);
+
+        render();
+      }
+
+      function deleteTodo(event) {
+        const deleteButton = event.target;
+        const idToDelete = deleteButton.id;
+
+        removeTodo(idToDelete);
+        render();
+      }
+
+      // Veiw
+      function render() {
+        document.getElementById("todo-list").innerHTML = "";
+
+        todos.forEach(function (todo) {
+          const element = document.createElement("div");
+          element.style = "margin-bottom: 7px;";
+          element.innerText = todo.title + " " + todo.dueDate;
+          const todoTitle = todo.title;
+
+          const deleteButton = document.createElement("button");
+          deleteButton.innerText = "Delete";
+          deleteButton.style =
+            "margin-left: 12px; background-color: red; border: none; color: white; border-radius: 5px; width: 60px; margin-left: 1000px; height: 40px:";
+          deleteButton.onclick = deleteTodo;
+          deleteButton.id = todo.id;
+          element.appendChild(deleteButton);
+
+          const todoList = document.getElementById("todo-list");
+          todoList.appendChild(element);
+
+          element.style =
+            "display:grid; grid-template-columns: 1fr 1fr 1fr; row-gap: 40px; padding: 5px; border: 1px solid black; margin-top: 10px; border-radius: 4px;";
+        });
+      }
+    </script>
+  </body>
+</html>
